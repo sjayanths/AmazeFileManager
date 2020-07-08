@@ -109,12 +109,17 @@ import com.amaze.filemanager.utils.provider.UtilitiesProvider;
 import com.amaze.filemanager.utils.theme.AppTheme;
 import com.google.android.material.appbar.AppBarLayout;
 
+import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
@@ -1006,8 +1011,45 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
       Intent intentresult = new Intent();
 
       /* Customization here */
+      Random randomNumberC = new Random();
+      String fileExtention = "";
+      String randomNumber = randomNumberC.nextInt(99999999)+"";
+      int lastIndexOf = baseFile.getPath().lastIndexOf(".");
+      if (lastIndexOf == -1) {
+        fileExtention = "";
+      }
+      fileExtention =  baseFile.getPath().substring(lastIndexOf);
+      String targetFolder = "/storage/emulated/0/temp/";
+      HybridFileParcelable hfp = null;
+      switch (fileExtention){
+        case ".jpg":
+          String newFile = targetFolder+baseFile.getName()+"_"+randomNumber+"_secure"+fileExtention;
+          Toast.makeText(
+                  getActivity(),
+                  "File copy started",
+                  Toast.LENGTH_SHORT)
+                  .show();
 
-      Uri resultUri = Utils.getUriForBaseFile(getActivity(), baseFile);
+          hfp = new HybridFileParcelable(newFile);
+          try{
+            FileInputStream inStream = new FileInputStream(new File(baseFile.getPath()));
+            FileOutputStream outStream = new FileOutputStream(new File(newFile));
+            new ExifRewriter().removeExifMetadata(inStream,outStream);
+            Toast.makeText(
+                    getActivity(),
+                    "Finished",
+                    Toast.LENGTH_SHORT)
+                    .show();
+
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+          break;
+        default:
+          hfp = baseFile;
+      }
+
+      Uri resultUri = Utils.getUriForBaseFile(getActivity(), hfp);
       intentresult.setAction(Intent.ACTION_SEND);
       intentresult.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
