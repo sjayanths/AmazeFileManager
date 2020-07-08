@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.format.Formatter;
 import android.util.Log;
@@ -1012,18 +1013,25 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
 
       /* Customization here */
       Random randomNumberC = new Random();
-      String fileExtention = "";
+      String fileExtension = "";
       String randomNumber = randomNumberC.nextInt(99999999)+"";
       int lastIndexOf = baseFile.getPath().lastIndexOf(".");
       if (lastIndexOf == -1) {
-        fileExtention = "";
+        fileExtension = "";
       }
-      fileExtention =  baseFile.getPath().substring(lastIndexOf);
-      String targetFolder = "/storage/emulated/0/temp/";
+      fileExtension =  baseFile.getPath().substring(lastIndexOf);
+      File internalRootDir = Environment.getExternalStorageDirectory();
+      String internalRootDirPath = internalRootDir.getAbsolutePath();
+      String directoryName = "amaze-temp";
+      String processedDirectory = internalRootDirPath+"/"+directoryName;
+      File processedDirectoryF = new File(processedDirectory);
+      if(!processedDirectoryF.exists()) {
+        processedDirectoryF.mkdir();
+      }
       HybridFileParcelable hfp = null;
-      switch (fileExtention){
+      switch (fileExtension){
         case ".jpg":
-          String newFile = targetFolder+baseFile.getName()+"_"+randomNumber+"_secure"+fileExtention;
+          String newFile = processedDirectory + "/" + baseFile.getName() + "_" + randomNumber + "_secure" + fileExtension;
           Toast.makeText(
                   getActivity(),
                   "File copy started",
