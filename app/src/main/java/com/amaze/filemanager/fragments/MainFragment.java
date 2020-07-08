@@ -20,60 +20,6 @@
 
 package com.amaze.filemanager.fragments;
 
-import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.*;
-import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SHOW_DIVIDERS;
-import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SHOW_GOBACK_BUTTON;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.amaze.filemanager.R;
-import com.amaze.filemanager.activities.MainActivity;
-import com.amaze.filemanager.activities.superclasses.ThemedActivity;
-import com.amaze.filemanager.adapters.RecyclerAdapter;
-import com.amaze.filemanager.adapters.data.LayoutElementParcelable;
-import com.amaze.filemanager.asynchronous.asynctasks.DeleteTask;
-import com.amaze.filemanager.asynchronous.asynctasks.LoadFilesListTask;
-import com.amaze.filemanager.asynchronous.handlers.FileHandler;
-import com.amaze.filemanager.database.CloudHandler;
-import com.amaze.filemanager.database.CryptHandler;
-import com.amaze.filemanager.database.SortHandler;
-import com.amaze.filemanager.database.models.EncryptedEntry;
-import com.amaze.filemanager.database.models.Tab;
-import com.amaze.filemanager.filesystem.CustomFileObserver;
-import com.amaze.filemanager.filesystem.FileUtil;
-import com.amaze.filemanager.filesystem.HybridFile;
-import com.amaze.filemanager.filesystem.HybridFileParcelable;
-import com.amaze.filemanager.filesystem.MediaStoreHack;
-import com.amaze.filemanager.filesystem.PasteHelper;
-import com.amaze.filemanager.filesystem.ssh.SshClientUtils;
-import com.amaze.filemanager.ui.dialogs.GeneralDialogCreation;
-import com.amaze.filemanager.ui.icons.MimeTypes;
-import com.amaze.filemanager.ui.views.DividerItemDecoration;
-import com.amaze.filemanager.ui.views.FastScroller;
-import com.amaze.filemanager.ui.views.RoundedImageView;
-import com.amaze.filemanager.ui.views.WarnableTextInputValidator;
-import com.amaze.filemanager.utils.BottomBarButtonPath;
-import com.amaze.filemanager.utils.DataUtils;
-import com.amaze.filemanager.utils.MainActivityHelper;
-import com.amaze.filemanager.utils.OTGUtil;
-import com.amaze.filemanager.utils.OpenMode;
-import com.amaze.filemanager.utils.SmbStreamer.Streamer;
-import com.amaze.filemanager.utils.Utils;
-import com.amaze.filemanager.utils.cloud.CloudUtil;
-import com.amaze.filemanager.utils.files.CryptUtil;
-import com.amaze.filemanager.utils.files.EncryptDecryptUtils;
-import com.amaze.filemanager.utils.files.FileListSorter;
-import com.amaze.filemanager.utils.files.FileUtils;
-import com.amaze.filemanager.utils.provider.UtilitiesProvider;
-import com.amaze.filemanager.utils.theme.AppTheme;
-import com.google.android.material.appbar.AppBarLayout;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -120,8 +66,65 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.amaze.filemanager.R;
+import com.amaze.filemanager.activities.MainActivity;
+import com.amaze.filemanager.activities.superclasses.ThemedActivity;
+import com.amaze.filemanager.adapters.RecyclerAdapter;
+import com.amaze.filemanager.adapters.data.LayoutElementParcelable;
+import com.amaze.filemanager.asynchronous.asynctasks.DeleteTask;
+import com.amaze.filemanager.asynchronous.asynctasks.LoadFilesListTask;
+import com.amaze.filemanager.asynchronous.handlers.FileHandler;
+import com.amaze.filemanager.database.CloudHandler;
+import com.amaze.filemanager.database.CryptHandler;
+import com.amaze.filemanager.database.SortHandler;
+import com.amaze.filemanager.database.models.EncryptedEntry;
+import com.amaze.filemanager.database.models.Tab;
+import com.amaze.filemanager.filesystem.CustomFileObserver;
+import com.amaze.filemanager.filesystem.FileUtil;
+import com.amaze.filemanager.filesystem.HybridFile;
+import com.amaze.filemanager.filesystem.HybridFileParcelable;
+import com.amaze.filemanager.filesystem.MediaStoreHack;
+import com.amaze.filemanager.filesystem.PasteHelper;
+import com.amaze.filemanager.filesystem.ssh.SshClientUtils;
+import com.amaze.filemanager.ui.dialogs.GeneralDialogCreation;
+import com.amaze.filemanager.ui.icons.MimeTypes;
+import com.amaze.filemanager.ui.views.DividerItemDecoration;
+import com.amaze.filemanager.ui.views.FastScroller;
+import com.amaze.filemanager.ui.views.RoundedImageView;
+import com.amaze.filemanager.ui.views.WarnableTextInputValidator;
+import com.amaze.filemanager.utils.BottomBarButtonPath;
+import com.amaze.filemanager.utils.DataUtils;
+import com.amaze.filemanager.utils.MainActivityHelper;
+import com.amaze.filemanager.utils.OTGUtil;
+import com.amaze.filemanager.utils.OpenMode;
+import com.amaze.filemanager.utils.SmbStreamer.Streamer;
+import com.amaze.filemanager.utils.Utils;
+import com.amaze.filemanager.utils.cloud.CloudUtil;
+import com.amaze.filemanager.utils.files.CryptUtil;
+import com.amaze.filemanager.utils.files.EncryptDecryptUtils;
+import com.amaze.filemanager.utils.files.FileListSorter;
+import com.amaze.filemanager.utils.files.FileUtils;
+import com.amaze.filemanager.utils.provider.UtilitiesProvider;
+import com.amaze.filemanager.utils.theme.AppTheme;
+import com.google.android.material.appbar.AppBarLayout;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
+
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_DIRECTORY_SORT_MODE;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_GRID_COLUMNS;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SHOW_DIVIDERS;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SHOW_GOBACK_BUTTON;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SHOW_HIDDENFILES;
+import static com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants.PREFERENCE_SHOW_THUMB;
 
 public class MainFragment extends Fragment implements BottomBarButtonPath {
 
@@ -1001,6 +1004,8 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
       Log.d("pickup", "file");
 
       Intent intentresult = new Intent();
+
+      /* Customization here */
 
       Uri resultUri = Utils.getUriForBaseFile(getActivity(), baseFile);
       intentresult.setAction(Intent.ACTION_SEND);
