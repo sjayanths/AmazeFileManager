@@ -37,7 +37,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.text.format.Formatter;
 import android.util.Log;
@@ -99,6 +98,7 @@ import com.amaze.filemanager.utils.DataUtils;
 import com.amaze.filemanager.utils.MainActivityHelper;
 import com.amaze.filemanager.utils.OTGUtil;
 import com.amaze.filemanager.utils.OpenMode;
+import com.amaze.filemanager.utils.PrivacyGurad;
 import com.amaze.filemanager.utils.SmbStreamer.Streamer;
 import com.amaze.filemanager.utils.Utils;
 import com.amaze.filemanager.utils.cloud.CloudUtil;
@@ -110,17 +110,12 @@ import com.amaze.filemanager.utils.provider.UtilitiesProvider;
 import com.amaze.filemanager.utils.theme.AppTheme;
 import com.google.android.material.appbar.AppBarLayout;
 
-import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
@@ -1012,26 +1007,30 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
       Intent intentresult = new Intent();
 
       /* Customization here */
-      Random randomNumberC = new Random();
-      String fileExtension = "";
+      PrivacyGurad p  = new PrivacyGurad(baseFile);
+      HybridFileParcelable hfp = p.applyPrivacyGuard();
+      /*Random randomNumberC = new Random();
       String randomNumber = randomNumberC.nextInt(99999999)+"";
+      String fileExtension = "";
+
       int lastIndexOf = baseFile.getPath().lastIndexOf(".");
-      if (lastIndexOf == -1) {
-        fileExtension = "";
+      if (lastIndexOf != -1) {
+        fileExtension =  baseFile.getPath().substring(lastIndexOf);
       }
-      fileExtension =  baseFile.getPath().substring(lastIndexOf);
       File internalRootDir = Environment.getExternalStorageDirectory();
       String internalRootDirPath = internalRootDir.getAbsolutePath();
-      String directoryName = "amaze-temp";
-      String processedDirectory = internalRootDirPath+"/"+directoryName;
+      String TEMPORARY_DIRECTORY = "amaze-temp";
+      String processedDirectory = internalRootDirPath+"/"+TEMPORARY_DIRECTORY;
       File processedDirectoryF = new File(processedDirectory);
       if(!processedDirectoryF.exists()) {
         processedDirectoryF.mkdir();
       }
+      String newFile = processedDirectory + "/" + baseFile.getName() + "_" + randomNumber + "_secure" + fileExtension;
       HybridFileParcelable hfp = null;
+      fileExtension = fileExtension.toLowerCase();
       switch (fileExtension){
         case ".jpg":
-          String newFile = processedDirectory + "/" + baseFile.getName() + "_" + randomNumber + "_secure" + fileExtension;
+
           Toast.makeText(
                   getActivity(),
                   "File copy started",
@@ -1055,7 +1054,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
           break;
         default:
           hfp = baseFile;
-      }
+      }*/
 
       Uri resultUri = Utils.getUriForBaseFile(getActivity(), hfp);
       intentresult.setAction(Intent.ACTION_SEND);
