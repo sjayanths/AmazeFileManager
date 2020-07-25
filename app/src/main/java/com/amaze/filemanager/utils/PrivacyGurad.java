@@ -2,8 +2,6 @@ package com.amaze.filemanager.utils;
 
 import android.os.Environment;
 
-import com.amaze.filemanager.filesystem.HybridFileParcelable;
-
 import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
 
 import java.io.File;
@@ -13,18 +11,20 @@ import java.util.Random;
 
 public class PrivacyGurad {
     final private String TEMPORARY_DIRECTORY = "amaze-temp";
-    private HybridFileParcelable selectedFile = null;
     private String processedDirectory = "";
+    private String inputFilePath = "";
+    private String inputFileName = "";
 
-    public PrivacyGurad(HybridFileParcelable baseFile) {
-        this.selectedFile = baseFile;
+    public PrivacyGurad(String inputFilePath,String inputFileName) {
+        this.inputFilePath = inputFilePath;
+        this.inputFileName = inputFileName;
     }
 
     private String getSelectedFileExtention() {
         String fileExtension = "";
-        int lastIndexOf = selectedFile.getPath().lastIndexOf(".");
+        int lastIndexOf = inputFilePath.lastIndexOf(".");
         if (lastIndexOf != -1) {
-            fileExtension =  selectedFile.getPath().substring(lastIndexOf);
+            fileExtension =  inputFilePath.substring(lastIndexOf);
         }
         fileExtension = fileExtension.toLowerCase();
         return fileExtension;
@@ -32,7 +32,7 @@ public class PrivacyGurad {
     private String getNewFileName() {
         Random randomNumberC = new Random();
         String randomNumber = randomNumberC.nextInt(99999999)+"";
-        String newFile = processedDirectory + "/" + selectedFile.getName() + "_" + randomNumber + "_secure" + getSelectedFileExtention();
+        String newFile = processedDirectory + "/" + inputFileName + "_" + randomNumber + "_secure" + getSelectedFileExtention();
         return newFile;
     }
     private void makeTemporaryDirectory() {
@@ -44,15 +44,15 @@ public class PrivacyGurad {
             processedDirectoryF.mkdir();
         }
     }
-    private HybridFileParcelable processFile() {
+
+    private String processFile() {
         String fileExtension = getSelectedFileExtention();
-        HybridFileParcelable hfp = null;
+        String copiedFile = getNewFileName();
         switch (fileExtension){
             case ".jpg":
-                String copiedFile = getNewFileName();
-                hfp = new HybridFileParcelable(copiedFile);
+
                 try{
-                    FileInputStream inStream = new FileInputStream(new File(selectedFile.getPath()));
+                    FileInputStream inStream = new FileInputStream(new File(inputFilePath));
                     FileOutputStream outStream = new FileOutputStream(new File(copiedFile));
                     new ExifRewriter().removeExifMetadata(inStream,outStream);
                 } catch (Exception e) {
@@ -60,11 +60,11 @@ public class PrivacyGurad {
                 }
                 break;
             default:
-                hfp = selectedFile;
+                copiedFile = inputFilePath;
         }
-        return hfp;
+        return copiedFile;
     }
-    public HybridFileParcelable applyPrivacyGuard() {
+    public String applyPrivacyGuard() {
         makeTemporaryDirectory();
         return processFile();
     }
