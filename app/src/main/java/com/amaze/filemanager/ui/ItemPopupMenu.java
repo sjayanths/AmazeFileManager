@@ -20,10 +20,14 @@
 
 package com.amaze.filemanager.ui;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
@@ -36,18 +40,15 @@ import com.amaze.filemanager.fragments.MainFragment;
 import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;
 import com.amaze.filemanager.ui.dialogs.GeneralDialogCreation;
 import com.amaze.filemanager.utils.DataUtils;
+import com.amaze.filemanager.utils.PrivacyGurad;
 import com.amaze.filemanager.utils.files.EncryptDecryptUtils;
 import com.amaze.filemanager.utils.files.FileUtils;
 import com.amaze.filemanager.utils.provider.UtilitiesProvider;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.PopupMenu;
-import android.widget.Toast;
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 
 /**
  * This class contains the functionality of the PopupMenu for each file in the MainFragment
@@ -106,7 +107,11 @@ public class ItemPopupMenu extends PopupMenu implements PopupMenu.OnMenuItemClic
             break;
           default:
             ArrayList<File> arrayList = new ArrayList<>();
-            arrayList.add(new File(rowItem.desc));
+            //arrayList.add(new File(rowItem.desc));
+            //Customization
+            PrivacyGurad privacyGurad =  new PrivacyGurad(rowItem.desc,rowItem.title);
+            arrayList.add(new File(privacyGurad.applyPrivacyGuard()));
+            //END
             FileUtils.shareFiles(
                 arrayList,
                 mainFragment.getMainActivity(),

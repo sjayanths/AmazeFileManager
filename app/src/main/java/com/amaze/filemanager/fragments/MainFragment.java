@@ -680,7 +680,11 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
             case R.id.share:
               ArrayList<File> arrayList = new ArrayList<>();
               for (LayoutElementParcelable e : checkedItems) {
-                arrayList.add(new File(e.desc));
+                //arrayList.add(new File(e.desc));
+                //Customization
+                PrivacyGurad privacyGurad =  new PrivacyGurad(e.desc,e.title);
+                arrayList.add(new File(privacyGurad.applyPrivacyGuard()));
+                //END
               }
               if (arrayList.size() > 100)
                 Toast.makeText(
@@ -1007,54 +1011,9 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
       Intent intentresult = new Intent();
 
       /* Customization here */
-      PrivacyGurad p  = new PrivacyGurad(baseFile);
-      HybridFileParcelable hfp = p.applyPrivacyGuard();
-      /*Random randomNumberC = new Random();
-      String randomNumber = randomNumberC.nextInt(99999999)+"";
-      String fileExtension = "";
-
-      int lastIndexOf = baseFile.getPath().lastIndexOf(".");
-      if (lastIndexOf != -1) {
-        fileExtension =  baseFile.getPath().substring(lastIndexOf);
-      }
-      File internalRootDir = Environment.getExternalStorageDirectory();
-      String internalRootDirPath = internalRootDir.getAbsolutePath();
-      String TEMPORARY_DIRECTORY = "amaze-temp";
-      String processedDirectory = internalRootDirPath+"/"+TEMPORARY_DIRECTORY;
-      File processedDirectoryF = new File(processedDirectory);
-      if(!processedDirectoryF.exists()) {
-        processedDirectoryF.mkdir();
-      }
-      String newFile = processedDirectory + "/" + baseFile.getName() + "_" + randomNumber + "_secure" + fileExtension;
-      HybridFileParcelable hfp = null;
-      fileExtension = fileExtension.toLowerCase();
-      switch (fileExtension){
-        case ".jpg":
-
-          Toast.makeText(
-                  getActivity(),
-                  "File copy started",
-                  Toast.LENGTH_SHORT)
-                  .show();
-
-          hfp = new HybridFileParcelable(newFile);
-          try{
-            FileInputStream inStream = new FileInputStream(new File(baseFile.getPath()));
-            FileOutputStream outStream = new FileOutputStream(new File(newFile));
-            new ExifRewriter().removeExifMetadata(inStream,outStream);
-            Toast.makeText(
-                    getActivity(),
-                    "Finished",
-                    Toast.LENGTH_SHORT)
-                    .show();
-
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-          break;
-        default:
-          hfp = baseFile;
-      }*/
+      PrivacyGurad p  = new PrivacyGurad(baseFile.getPath(),baseFile.getName());
+      HybridFileParcelable hfp = new HybridFileParcelable(p.applyPrivacyGuard());
+      /* END */
 
       Uri resultUri = Utils.getUriForBaseFile(getActivity(), hfp);
       intentresult.setAction(Intent.ACTION_SEND);
