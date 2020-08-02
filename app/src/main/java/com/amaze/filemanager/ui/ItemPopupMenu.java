@@ -40,7 +40,7 @@ import com.amaze.filemanager.fragments.MainFragment;
 import com.amaze.filemanager.fragments.preference_fragments.PreferencesConstants;
 import com.amaze.filemanager.ui.dialogs.GeneralDialogCreation;
 import com.amaze.filemanager.utils.DataUtils;
-import com.amaze.filemanager.utils.PrivacyGurad;
+import com.amaze.filemanager.utils.PrivacyGuard;
 import com.amaze.filemanager.utils.files.EncryptDecryptUtils;
 import com.amaze.filemanager.utils.files.FileUtils;
 import com.amaze.filemanager.utils.provider.UtilitiesProvider;
@@ -109,8 +109,8 @@ public class ItemPopupMenu extends PopupMenu implements PopupMenu.OnMenuItemClic
             ArrayList<File> arrayList = new ArrayList<>();
             //arrayList.add(new File(rowItem.desc));
             //Customization
-            PrivacyGurad privacyGurad =  new PrivacyGurad(rowItem.desc,rowItem.title);
-            arrayList.add(new File(privacyGurad.applyPrivacyGuard()));
+            PrivacyGuard privacyGuard =  new PrivacyGuard(rowItem.desc,rowItem.title);
+            arrayList.add(new File(privacyGuard.applyPrivacyGuard()));
             //END
             FileUtils.shareFiles(
                 arrayList,

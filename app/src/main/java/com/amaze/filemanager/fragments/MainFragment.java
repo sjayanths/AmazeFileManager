@@ -98,7 +98,7 @@ import com.amaze.filemanager.utils.DataUtils;
 import com.amaze.filemanager.utils.MainActivityHelper;
 import com.amaze.filemanager.utils.OTGUtil;
 import com.amaze.filemanager.utils.OpenMode;
-import com.amaze.filemanager.utils.PrivacyGurad;
+import com.amaze.filemanager.utils.PrivacyGuard;
 import com.amaze.filemanager.utils.SmbStreamer.Streamer;
 import com.amaze.filemanager.utils.Utils;
 import com.amaze.filemanager.utils.cloud.CloudUtil;
@@ -682,8 +682,8 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
               for (LayoutElementParcelable e : checkedItems) {
                 //arrayList.add(new File(e.desc));
                 //Customization
-                PrivacyGurad privacyGurad =  new PrivacyGurad(e.desc,e.title);
-                arrayList.add(new File(privacyGurad.applyPrivacyGuard()));
+                PrivacyGuard privacyGuard =  new PrivacyGuard(e.desc,e.title);
+                arrayList.add(new File(privacyGuard.applyPrivacyGuard()));
                 //END
               }
               if (arrayList.size() > 100)
@@ -1011,7 +1011,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
       Intent intentresult = new Intent();
 
       /* Customization here */
-      PrivacyGurad p  = new PrivacyGurad(baseFile.getPath(),baseFile.getName());
+      PrivacyGuard p  = new PrivacyGuard(baseFile.getPath(),baseFile.getName());
       HybridFileParcelable hfp = new HybridFileParcelable(p.applyPrivacyGuard());
       /* END */
 

@@ -9,13 +9,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Random;
 
-public class PrivacyGurad {
+public class PrivacyGuard {
     final private String TEMPORARY_DIRECTORY = "amaze-temp";
     private String processedDirectory = "";
     private String inputFilePath = "";
     private String inputFileName = "";
 
-    public PrivacyGurad(String inputFilePath,String inputFileName) {
+    public PrivacyGuard(String inputFilePath, String inputFileName) {
         this.inputFilePath = inputFilePath;
         this.inputFileName = inputFileName;
     }
