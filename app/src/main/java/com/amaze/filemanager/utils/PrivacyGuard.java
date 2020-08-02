@@ -32,7 +32,8 @@ public class PrivacyGuard {
     private String getNewFileName() {
         Random randomNumberC = new Random();
         String randomNumber = randomNumberC.nextInt(99999999)+"";
-        String newFile = processedDirectory + "/" + inputFileName + "_" + randomNumber + "_secure" + getSelectedFileExtention();
+        String newFile = processedDirectory + "/" + inputFileName + "_" + randomNumber + "_secure"
+                + getSelectedFileExtention();
         return newFile;
     }
     private void makeTemporaryDirectory() {
