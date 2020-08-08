@@ -51,7 +51,6 @@ public class PrivacyGuard {
         String copiedFile = getNewFileName();
         switch (fileExtension){
             case ".jpg":
-
                 try{
                     FileInputStream inStream = new FileInputStream(new File(inputFilePath));
                     FileOutputStream outStream = new FileOutputStream(new File(copiedFile));
