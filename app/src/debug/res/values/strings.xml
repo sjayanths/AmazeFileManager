@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="appbar_name" translatable="false">Amaze Debug</string>
+    <!-- Amaze Debug -->
+    <string name="appbar_name" translatable="false">Meta Clipper</string>
 </resources>
