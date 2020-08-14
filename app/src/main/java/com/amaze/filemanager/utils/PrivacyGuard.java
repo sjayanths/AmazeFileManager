@@ -1,5 +1,7 @@
 package com.amaze.filemanager.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 
 import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
@@ -55,6 +57,19 @@ public class PrivacyGuard {
                     FileInputStream inStream = new FileInputStream(new File(inputFilePath));
                     FileOutputStream outStream = new FileOutputStream(new File(copiedFile));
                     new ExifRewriter().removeExifMetadata(inStream,outStream);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case ".cr2":
+            case ".heic":
+            case ".gif":
+            case ".png":
+                try{
+                    FileInputStream inStream = new FileInputStream(new File(inputFilePath));
+                    FileOutputStream outStream = new FileOutputStream(new File(copiedFile));
+                    Bitmap picBitmap = BitmapFactory.decodeFile(inputFilePath);
+                    picBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
